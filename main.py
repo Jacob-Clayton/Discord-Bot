@@ -9,7 +9,7 @@ from discord import Intents
 bot = commands.Bot(command_prefix = '!', intents=Intents.all())
 
 #Private discord channel token
-token = ('MTAzODE0NjY1MzcyODgwOTEzMQ.G1HBlF.EHORKKXqGdyNg4bw9H3ZV3Kc_fFmEzNR4SrUXg')
+token = ('Insert token here')
 
 #Bot status messages [Connected - Ready - Resumed - Disconected]
 @bot.event
