@@ -4,25 +4,26 @@ import requests
 import json
 import asyncio
 import os
+import random
 #from dotenv import load_dotenv
 from discord import Intents
 from discord.ext import commands, tasks
 from discord.utils import get
 from discord.ext.commands import Bot, Context
 
-#.env file to safely assign the token value
+#.env file to safely assign the token value (uncomment two lines below to set up .env)
 #load_dotenv('.env')
 #token = os.getenv('TOKEN')
 
-#Allow intents so the bot can access all features
+#Allow all intents so the bot can access all features
 intents = discord.Intents.all()
 
-#Setup bot prefix
+#Setup command bot prefix
 prefix = '!'
 bot = commands.Bot(command_prefix=prefix, intents=intents)
 
 #Private discord channel token. Move this to a .env file when going live to hide the token
-token = ('Enter Token Here')
+token = ('enter token here')
 
 
 #-------------------------------------Events----------------------------------------
@@ -65,8 +66,12 @@ async def on_raw_reaction_add(reaction):
       await reaction.member.add_roles(verified_role)
       await reaction.member.send(f'Welcome to Bridgr {reaction.member.name}, you are now verified.')
 
+#Sad words + Encouragements
+sad_words = ['sad', 'depressed', 'lonely', 'kms', 'depressing', 'miserable', 'i feel shit', 'i feel like shit']
+encouragements = ['Cheer up!', 'You are a great person', 'You are part of the family!', 'You always have the community to talk to :)', 'Hang in there']
 
-#Get quotes from API and concatenate response with quote author
+
+#Get quotes from API and concatenate quote + author
 def get_quote():
   response = requests.get("https://zenquotes.io/api/random")
   json_data = json.loads(response.text)
@@ -74,19 +79,26 @@ def get_quote():
   return (quote)
 
 
-#Send inspirational quote when a user types !inspire
+#Send uplifting quote when a user types !inspire
 @bot.event
 async def on_message(message):
-  if message.content == '!inspire':
+  msg = message.content
+  if msg == '!inspire':
     quote = get_quote()
+    #embedQ = discord.Embed(title=(quote), color=0x2f3136)
     await message.channel.send(quote)
+  
+  #Send random message of encouragement if bot detects a sad word
+  if any (word in msg for word in sad_words):
+    await msg.channel.send(random.choice(encouragements))
+
 
 #Return an embeded message with a link to the Ape Gang Wiki when a user types '!wiki'
 @bot.event
 async def on_message(message):
-    if message.content == '!wiki':
-        embedVar = discord.Embed(title="Ape Gang Wiki", url='https://wiki.apegang.art', description="The official resource", color=0x2f3136)
-        await message.channel.send(embed=embedVar)
+  if message.content == '!wiki':
+    embedVar = discord.Embed(title="Ape Gang Wiki", url='https://wiki.apegang.art', description="The official AG resource", color=0x2f3136)
+    await message.channel.send(embed=embedVar)
 
 
 bot.run(token)
