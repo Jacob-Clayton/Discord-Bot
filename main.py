@@ -23,7 +23,7 @@ prefix = '!'
 bot = commands.Bot(command_prefix=prefix, intents=intents)
 
 #Private discord channel token. Move this to a .env file when going live to hide the token
-token = ('enter token here')
+token = ('MTAzODE0NjY1MzcyODgwOTEzMQ.GnnAxA.9HgZBvkXsgmNaZRrlHYrQWt62IUj_q_R2rSPCQ')
 
 
 #-------------------------------------Events----------------------------------------
